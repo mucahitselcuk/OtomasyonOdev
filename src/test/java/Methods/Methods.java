@@ -41,9 +41,7 @@ public class Methods extends BaseTest {
     }
 
     //Element var olana kadar bekle
-    public void waitUntilPresence(By by) {
-        wait.until(ExpectedConditions.presenceOfElementLocated(by));
-    }
+    public void waitUntilPresence(By by) {wait.until(ExpectedConditions.presenceOfElementLocated(by));}
 
     //Element tıklanabilir olana kadar bekle
     public void waitUntilElementClickable(By by) {
@@ -130,10 +128,12 @@ public class Methods extends BaseTest {
     public String getText(By by) {
         waitUntilPresence(by);
         return findElement(by).getText();
+
     }
 
     public String getValue(By by) {
         waitUntilPresence(by);
         return getJSExecutor().executeScript("return arguments[0].value;", findElement(by)).toString();
     }
+
 }

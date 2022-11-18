@@ -18,5 +18,7 @@ public class ProductTest extends BaseTest {
         productPage.searchProduct();
         productPage.clickMore();
         productPage.productList();
+        productPage.addProduct();
+        productPage.basket();
     }
 }
