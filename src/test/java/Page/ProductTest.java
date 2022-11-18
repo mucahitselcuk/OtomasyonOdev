@@ -1,4 +1,4 @@
-package driver.test;
+package Page;
 
 import Page.ProductPage;
 import driver.BaseTest;
@@ -14,11 +14,13 @@ public class ProductTest extends BaseTest {
     }
 
     @Test
-    public void productTest() {
+    public void productTest() throws InterruptedException {
         productPage.searchProduct();
         productPage.clickMore();
         productPage.productList();
         productPage.addProduct();
         productPage.basket();
+        productPage.oldPrice();
+        productPage.verifySearch();
     }
 }

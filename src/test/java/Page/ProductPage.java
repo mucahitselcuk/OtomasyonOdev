@@ -1,6 +1,8 @@
 package Page;
 
 import Methods.Methods;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import javafx.scene.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,6 +12,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+
+import java.io.FileReader;
+import java.io.IOException;
 
 public class ProductPage extends Methods {
 
@@ -21,7 +26,8 @@ public class ProductPage extends Methods {
     }
 
     public void searchProduct() {
-        waitBySeconds(2);
+        String strUrl = driver.getCurrentUrl();
+        System.out.println("Gidilen URL :"+ strUrl);
         sendKeys(By.id("search"), "Ceket");
         waitBySeconds(2);
         driver.findElement(By.id("search")).sendKeys(Keys.ENTER);
@@ -33,6 +39,8 @@ public class ProductPage extends Methods {
         waitBySeconds(2);
         clickElement(By.cssSelector(".button.-secondary.-sm.relative"));
         waitBySeconds(2);
+        String strUrl = driver.getCurrentUrl();
+        System.out.println("Yeni URL :"+ strUrl);
     }
 
     public void productList() {
@@ -45,9 +53,6 @@ public class ProductPage extends Methods {
     }
 
     public void addProduct() {
-
-        //waitUntilElementClickable(By.cssSelector("div[class='product__content -sizes']>:nth-child(1)"));
-
         clickElement(By.cssSelector("div[class='product__content -sizes']>:nth-child(3)"));
         clickElement(By.cssSelector(".product__button.-addToCart.btn.-black"));
         waitBySeconds(2);
@@ -57,17 +62,48 @@ public class ProductPage extends Methods {
 
     public void basket() {
         //waitUntilPresence(By.cssSelector(".cartItem__attrValue"));
-        WebElement firstResult= findElement(By.xpath("//*[@id=\"cop-app\"]/div/div[1]/div[1]/div[1]/div[2]/section/div[3]/div/div/div[1]/div[1]/div[1]/span[2]"));
-        WebElement secondResult= findElement(By.xpath("//*[@id=\"cop-app\"]/div/div[1]/div[1]/div[1]/div[2]/section/div[3]/div/div/div[1]/div[3]/span[1]"));
+        WebElement firstResult = findElement(By.xpath("//*[@id=\"cop-app\"]/div/div[1]/div[1]/div[1]/div[2]/section/div[3]/div/div/div[1]/div[1]/div[1]/span[2]"));
+        WebElement secondResult = findElement(By.xpath("//*[@id=\"cop-app\"]/div/div[1]/div[1]/div[1]/div[2]/section/div[3]/div/div/div[1]/div[3]/span[1]"));
         String first = firstResult.getText();
-        String second= secondResult.getText();
-        System.out.println("Ürün Bedeni : "+ first);
-        System.out.println("Ürün Fiyatı : "+ second);
+        String second = secondResult.getText();
+        System.out.println("Ürün Bedeni : " + first);
+        System.out.println("Ürün Fiyatı : " + second);
         waitBySeconds(2);
-
     }
 
+    public void oldPrice() {
+        WebElement firstResult = findElement(By.xpath("//*[@id=\"cop-app\"]/div/div[1]/div[1]/div[1]/div[2]/section/div[3]/div/div/div[1]/div[3]/span[2]"));
+        WebElement secondResult = findElement(By.xpath("//*[@id=\"cop-app\"]/div/div[1]/div[1]/div[1]/div[2]/section/div[3]/div/div/div[1]/div[3]/span[1]"));
+        String first, second;
+        first = firstResult.getText();
+        second = secondResult.getText();
+        System.out.println("Ürün Eski Fiyatı : " + first);
+        System.out.println("Ürün Yeni Fiyatı : " + second);
+        clickElement(By.cssSelector(".continueButton.n-button.large.block.text-center.-primary"));
+    }
 
+    public void verifySearch() throws InterruptedException {
+
+        String CSV_file = "C:\\Users\\testinium\\kullanicibilgileri.csv";
+        CSVReader reader = null;
+        try {
+            reader = new CSVReader(new FileReader(CSV_file));
+            String[] cell;
+
+            while ((cell = reader.readNext())!= null) {
+                String keyword = cell[0];
+                String keyword2= cell[1];
+                sendKeys(By.id("n-input-email"),keyword);
+                sendKeys(By.id("n-input-password"),keyword2);
+                System.out.println("System enters search keyword.");
+                waitBySeconds(5);
+            }
+
+        } catch (IOException | CsvValidationException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
 
 
